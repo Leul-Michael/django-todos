@@ -1,0 +1,22 @@
+{% load static %}<!>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Todos.</title>
+    <link rel="stylesheet" href="{% static "css/app.min.css" %}">
+  </head>
+  <body class="bg-background text-color">
+    <main
+      class="w-full max-w-screen-xl mx-auto min-h-screen h-full flex flex-col antialiased overflow-x-hidden px-5 md:px-10"
+    >
+      {% include "header.html" %}<!>
+      {% include "toast.html" %}<!>
+      {% block content %}{% endblock content %}<!>
+      {% include "footer.html" %}
+    </main>
+
+    <script src="{% static 'js/main.js' %}"></script>
+  </body>
+</html>

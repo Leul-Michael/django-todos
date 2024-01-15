@@ -1,0 +1,162 @@
+{% extends "main.html" %}<!>
+{% load static method_override %}<!>
+{% block content %}<!>
+{% if request.user.is_authenticated %}
+<section class="max-w-screen-lg mx-auto flex flex-col w-full py-10 h-full flex-1 gap-8">
+  <h1 class="text-2xl">Welcome {{request.user}}</h1>
+  <div class="sticky top-[120px] flex items-center gap-2 w-full border-b overflow-x-auto hide-scrollbar transition">
+      <a aria-label="Add a List" title="Add a List" href="{% url "new-list" %}" class="flex pb-2 active:border-b active:border-accent"><img src="{% static "svgs/add.svg" %}" alt="plus sign" class="min-w-[25px] w-[25px]"  /></a>
+      <a aria-label="Starred Pending Tasks" title="Starred Pending Tasks" href="{% url 'home' %}?list=starred" class="{% if list == '' or list == 'starred' %}border-b border-accent text-accent{% endif %} flex pb-2 active:border-b active:border-accent gap-2 px-2 hover:text-accent">
+        <img src="{% static "svgs/star.svg" %}" alt="plus sign" class="min-w-[20px] w-[20px] h-[20px] min-h-[20px]"  />
+        Starred
+      </a>
+      {% for li in lists %}
+        <a title="{{li}} Tasks" id="{% if li|lower == list %}active-list{% endif %}" href="{% url 'home' %}?list={{li}}" class="{% if li|lower == list %}border-b border-accent text-accent{% endif %} capitalize flex pb-2 active:border-b active:border-accent px-2 hover:text-accent">{{li}}</a>
+      {% endfor %}
+  </div>
+  <div class="flex flex-col w-full gap-8">
+   {% if list != None and list != '' and list != 'starred' %}
+    <div class="flex items-center gap-4 flex-wrap w-max self-end">
+      <a href="{% url 'new-task' list %}" class="py-2 px-5 text-sm text-color bg-border rounded-md hover:bg-border/70 font-bold transition">
+        Add Task
+      </a>
+      <a aria-label="Edit {{list}} list" title="Edit {{list}} list" href="{% url 'update-list' list %}" class="py-2 px-3 text-sm bg-border rounded-md hover:bg-border/70 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" class="min-w-[20px] w-[20px] aspect-square fill-color" x="0px" y="0px" viewBox="0 0 128 128">
+          <path d="M 79.335938 15.667969 C 78.064453 15.622266 76.775 15.762109 75.5 16.099609 C 72.1 16.999609 69.299609 19.199219 67.599609 22.199219 L 64 28.699219 C 63.2 30.099219 63.699609 32.000781 65.099609 32.800781 L 82.400391 42.800781 C 82.900391 43.100781 83.400391 43.199219 83.900391 43.199219 C 84.200391 43.199219 84.399219 43.199609 84.699219 43.099609 C 85.499219 42.899609 86.1 42.399219 86.5 41.699219 L 90.199219 35.199219 C 91.899219 32.199219 92.4 28.700781 91.5 25.300781 C 90.6 21.900781 88.400391 19.100391 85.400391 17.400391 C 83.525391 16.337891 81.455078 15.744141 79.335938 15.667969 z M 60.097656 38.126953 C 59.128906 38.201172 58.199219 38.724609 57.699219 39.599609 L 27.5 92 C 24.1 97.8 22.200781 104.30039 21.800781 110.90039 L 21 123.80078 C 20.9 124.90078 21.5 125.99961 22.5 126.59961 C 23 126.89961 23.5 127 24 127 C 24.6 127 25.199219 126.8 25.699219 126.5 L 36.5 119.40039 C 42 115.70039 46.7 110.8 50 105 L 80.300781 52.599609 C 81.100781 51.199609 80.599219 49.3 79.199219 48.5 C 77.799219 47.7 75.899609 48.199609 75.099609 49.599609 L 44.800781 102 C 41.900781 106.9 37.899609 111.20039 33.099609 114.40039 L 27.300781 118.19922 L 27.699219 111.30078 C 27.999219 105.60078 29.699609 100 32.599609 95 L 62.900391 42.599609 C 63.700391 41.199609 63.200781 39.3 61.800781 38.5 C 61.275781 38.2 60.678906 38.082422 60.097656 38.126953 z M 49 121 C 47.3 121 46 122.3 46 124 C 46 125.7 47.3 127 49 127 L 89 127 C 90.7 127 92 125.7 92 124 C 92 122.3 90.7 121 89 121 L 49 121 z M 104 121 A 3 3 0 0 0 101 124 A 3 3 0 0 0 104 127 A 3 3 0 0 0 107 124 A 3 3 0 0 0 104 121 z"></path>
+        </svg>
+      </a>
+    </div>
+   {% endif %}
+
+   <div class="flex flex-col gap-4 max-w-[600px] mx-auto w-full">
+    {% if tasks|length > 0 %}
+        {% for task in tasks %}
+          <a href="{% url 'view-task' task.id %}" aria-label="task" class="flex flex-col gap-2 sm:p-6 p-4 border rounded-lg hover:ring-offset-transparent hover:ring-1 hover:ring-offset-1 hover:ring-border focus:ring-offset-transparent focus:ring-1 focus:ring-offset-1 focus:ring-border/70">
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+              <h3 class="text-xl">{{task.name}}</h3>
+              <form id="form" action="{% url 'star-task' task.id %}" method="POST">
+                {% csrf_token %}<!>
+                {% method_override 'PATCH' %}
+                <button id="form-btn" type="submit">
+                  <svg id="{{task.id}}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" id="star">
+                    <defs>
+                      <linearGradient id="b" x1="-1483.396" x2="-1155.767" y1="1056.787" y2="1056.787" gradientUnits="userSpaceOnUse" xlink:href="#a"></linearGradient>
+                    </defs>
+                    <path fill="{% if task.is_starred %}#f7a928{% else %}#fff{% endif %}" d="M-1220 1212.362c-11.656 8.326-86.446-44.452-100.77-44.568-14.324-.115-89.956 51.449-101.476 42.936-11.52-8.513 15.563-95.952 11.247-109.61-4.316-13.658-76.729-69.655-72.193-83.242 4.537-13.587 96.065-14.849 107.721-23.175 11.656-8.325 42.535-94.497 56.86-94.382 14.323.116 43.807 86.775 55.327 95.288 11.52 8.512 103.017 11.252 107.334 24.91 4.316 13.658-68.99 68.479-73.527 82.066-4.536 13.587 21.133 101.451 9.477 109.777z" color="#000" overflow="visible" transform="matrix(.04574 0 0 .04561 68.85 -40.34)" style="marker:none"></path>
+                  </svg>
+                </button>
+              </form>
+            </div>
+            <div class="flex flex-col gap-1 w-full">
+              <p class="text-sm text-color-light">
+                {% if task.description|length > 100 %}
+                  {{task.description|slice:"100"}}...
+                {% else %}
+                  {{task.description}}
+                {% endif %}
+              </p>
+              <span class="self-end text-xs text-color-light">Added {{task.created_at|timesince}} ago</span>
+            </div>
+          </a>
+        {% endfor %}
+      {% else %}
+        {% if list == '' or list == 'starred' %}
+          <p class="text-sm text-color-light">No starred task found!</p>
+        {% else %}
+          <p class="text-sm text-color-light">No '{{list}}' pending task found!</p>
+        {% endif %}
+      {% endif %}
+    </div>
+    {% if completed_tasks|length > 0 %}
+      <div class="flex flex-col gap-4 max-w-[600px] mx-auto w-full">
+        <div class="flex justify-between items-center gap-4 flex-wrap w-full py-4 px-4 sm:px-6 border rounded-lg">
+          <h3 class="text-lg">Completed Tasks</h3>
+          <span>({{completed_tasks|length}})</span>
+        </div> 
+        {% for task in completed_tasks %}
+          <a href="{% url 'view-task' task.id %}" aria-label="task" class="flex flex-col gap-2 sm:p-6 p-4 border rounded-lg hover:ring-offset-transparent hover:ring-1 hover:ring-offset-1 hover:ring-border focus:ring-offset-transparent focus:ring-1 focus:ring-offset-1 focus:ring-border/70">
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+              <h3 class="text-xl line-through">{{task.name}}</h3>
+              <form id="form" action="{% url 'star-task' task.id %}" method="POST">
+                {% csrf_token %}<!>
+                {% method_override 'PATCH' %}
+                <button id="form-btn" type="submit">
+                  <svg id="{{task.id}}" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="16" height="16" id="star">
+                    <defs>
+                      <linearGradient id="b" x1="-1483.396" x2="-1155.767" y1="1056.787" y2="1056.787" gradientUnits="userSpaceOnUse" xlink:href="#a"></linearGradient>
+                    </defs>
+                    <path fill="{% if task.is_starred %}#f7a928{% else %}#fff{% endif %}" d="M-1220 1212.362c-11.656 8.326-86.446-44.452-100.77-44.568-14.324-.115-89.956 51.449-101.476 42.936-11.52-8.513 15.563-95.952 11.247-109.61-4.316-13.658-76.729-69.655-72.193-83.242 4.537-13.587 96.065-14.849 107.721-23.175 11.656-8.325 42.535-94.497 56.86-94.382 14.323.116 43.807 86.775 55.327 95.288 11.52 8.512 103.017 11.252 107.334 24.91 4.316 13.658-68.99 68.479-73.527 82.066-4.536 13.587 21.133 101.451 9.477 109.777z" color="#000" overflow="visible" transform="matrix(.04574 0 0 .04561 68.85 -40.34)" style="marker:none"></path>
+                  </svg>
+                </button>
+              </form>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+{% else %}
+<section class="flex flex-col w-full py-20 gap-8">
+  <h1 class="text-4xl sm:text-6xl font-bold">
+    Start Living with <span class="text-accent">GOALS</span>!
+  </h1>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="flex flex-col gap-2 border rounded-lg col-span-2 p-6">
+      <span class="text-3xl sm:text-5xl font-thin text-color-light">01</span>
+      <h1 class="text-xl sm:text-3xl font-bold mb-4">Increased Productivity</h1>
+      <p class="text-sm text-color-light">
+        Task management helps individuals prioritize their activities, set
+        goals, and stay organized. By breaking down larger tasks into smaller,
+        manageable steps, people can focus on completing one task at a time,
+        leading to increased productivity and efficiency.
+      </p>
+    </div>
+    <div class="flex flex-col gap-2 border rounded-lg p-6">
+      <span class="text-5xl font-thin text-color-light">02</span>
+      <h1 class="text-xl sm:text-3xl font-bold mb-4">Time Management</h1>
+      <p class="text-sm text-color-light">
+        It allows individuals to allocate their time effectively. By setting
+        deadlines and prioritizing tasks, people can ensure that important
+        activities are completed on time, reducing the risk of procrastination
+        and last-minute rushes.
+      </p>
+    </div>
+    <div class="flex flex-col gap-2 border rounded-lg p-6">
+      <span class="text-5xl font-thin text-color-light">03</span>
+      <h1 class="text-xl sm:text-3xl font-bold mb-4">Reduced Stress</h1>
+      <p class="text-sm text-color-light">
+        A well-organized task management system can help individuals feel more
+        in control of their responsibilities. By having a clear plan and
+        structure in place, people can avoid feeling overwhelmed and reduce
+        stress levels associated with forgetting or neglecting important tasks.
+      </p>
+    </div>
+    <div class="flex flex-col gap-2 border rounded-lg p-6">
+      <span class="text-5xl font-thin text-color-light">04</span>
+      <h1 class="text-xl sm:text-3xl font-bold mb-4">Goal Achievement</h1>
+      <p class="text-sm text-color-light">
+        It is a powerful tool for goal setting and achievement. Breaking down
+        long-term goals into smaller, actionable tasks makes them more
+        attainable. Regularly accomplishing these smaller tasks provides a sense
+        of progress, motivation, and a greater likelihood of achieving larger
+        objectives.
+      </p>
+    </div>
+    <div class="flex flex-col gap-2 border rounded-lg p-6">
+      <span class="text-5xl font-thin text-color-light">05</span>
+      <h1 class="text-xl sm:text-3xl font-bold mb-4">
+        Improved Accountability
+      </h1>
+      <p class="text-sm text-color-light">
+        It encourages accountability. Whether working individually or as part of
+        a team, having a clear list of tasks and deadlines helps individuals
+        take ownership of their responsibilities. This fosters a sense of
+        accountability and ensures that everyone is aware of their role in
+        achieving shared objectives.
+      </p>
+    </div>
+  </div>
+</div>
+{% endif %}<!>
+{% endblock content %}

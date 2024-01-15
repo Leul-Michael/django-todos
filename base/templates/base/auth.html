@@ -1,0 +1,99 @@
+{% extends "main.html" %}<!>
+
+{% load static %}<!>
+
+{% block content %}<!>
+<section
+  class="max-w-screen-lg mx-auto flex flex-col justify-center items-center w-full min-h-[80vh] py-20 h-full"
+>
+  <div
+    class="flex flex-col gap-2 p-4 sm:p-8 rounded-lg border sm:w-[475px] w-[95%] mx-auto"
+  >
+    <img src="{% static "images/logo.png" %}" alt="logo" class="w-[100px] my-8"><!>
+    {% if page == 'login' %}
+    <h1 class="text-xl sm:text-3xl font-bold">Welcome Back!</h1>
+    <p class="text-color-light">Provide your info below to continue.</p>
+    <form id="form" method="POST" action="" class="flex flex-col gap-6 my-4">
+      {% csrf_token %}
+      <div class="flex flex-col gap-1">
+        <label for="email" class="text-sm"
+          >Email <span class="text-red-500">*</span></label
+        >
+        <input
+          type="email"
+          placeholder="Your Email"
+          id="email"
+          name="email"
+          class="py-[0.65rem] px-3 border rounded-md bg-border outline-none focus:ring-offset-transparent focus:ring-1 focus:ring-offset-1 focus:ring-accent/70"
+          required
+          autoFocus
+        />
+      </div>
+      <div class="flex flex-col gap-1">
+        <label for="password" class="text-sm"
+          >Password <span class="text-red-500">*</span></label
+        >
+        <input
+          type="password"
+          placeholder="Your Password"
+          id="password"
+          name="password"
+          class="py-[0.65rem] px-3 border rounded-md bg-border outline-none focus:ring-offset-transparent focus:ring-1 focus:ring-offset-1 focus:ring-accent/70"
+          required
+        />
+      </div>
+      <button
+        type="submit"
+        class="group disabled:cursor-not-allowed relative flex items-center justify-center gap-4 py-2 h-[45px] px-5 text-sm text-color-foreground bg-accent rounded-md hover:bg-accent/80 font-bold transition"
+      >
+        <span class="absolute animate-spin left-3 hidden group-disabled:flex w-[20px] aspect-square border-[3px] border-r-transparent rounded-full"></span>
+        Login
+      </button>
+    </form>
+    <p class="text-center text-sm">
+      Don't have an account?
+      <a href="{% url "sign_up" %}" class="text-blue-600">Register Here</a>
+    </p>
+    {% else %}
+    <h1 class="text-xl sm:text-3xl font-bold">Welcome!</h1>
+    <p class="text-color-light">Provide your info below to continue.</p>
+    <form id="form" method="POST" action="" class="flex flex-col gap-6 my-4">
+      {% csrf_token %}
+      <div class="form-control">
+        {{ form.username.label_tag }}<!>
+        {{ form.username }}<!>
+        {{ form.username.errors }}
+      </div>
+      <div class="form-control">
+        {{ form.email.label_tag }}<!>
+        {{ form.email }}<!>
+        {{ form.email.errors }}
+      </div>
+      <div class="form-control">
+        {{ form.password1.label_tag }}<!>
+        {{ form.password1 }}<!>
+        {{ form.password1.errors }}
+      </div>
+      <div class="form-control">
+        {{ form.password2.label_tag }}<!>
+        {{ form.password2 }}<!>
+        {{ form.password2.errors }}
+      </div>
+      <button
+        type="submit"
+        class="group disabled:cursor-not-allowed relative py-2 h-[45px] px-5 text-sm text-color-foreground bg-accent rounded-md hover:bg-accent/80 font-bold transition"
+      >
+        <span class="absolute animate-spin left-3 hidden group-disabled:flex w-[20px] aspect-square border-[3px] border-r-transparent rounded-full"></span>
+        Register
+      </button>
+    </form>
+    <p class="text-center text-sm">
+      Already have an account?
+      <a href="{% url "login" %}" class="text-blue-600">Login Here</a>
+    </p>
+    {% endif %}<!>
+  </div>
+</section>
+{% endblock content %}
+
+

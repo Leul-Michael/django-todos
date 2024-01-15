@@ -1,0 +1,21 @@
+{% load static %}
+<header class="w-full flex justify-between items-center gap-4 py-4">
+  <a href="/" class="text-2xl text-accent font-bold"><img src="{% static "images/logo.png" %}" alt="logo" class="w-[100px]"></a>
+  <div class="flex items-center gap-6">
+    {% comment %} <a 
+        href="/todos" 
+        {% if request.path == '/todos/' %} class='text-sm text-accent-dark font-semibold' {% else %} class='hover:text-accent-dark transition text-sm font-semibold' {% endif %} 
+        >
+        todos
+    </a> {% endcomment %}
+  {% if request.user.is_authenticated %}
+  <a href="{% url "logout" %}" class="py-2 px-5 text-sm text-color-foreground bg-accent rounded-md hover:bg-accent/80 font-bold transition">
+    Logout
+  </a>
+  {% else %}
+  <a href="{% url "login" %}" class="py-2 px-5 text-sm text-color-foreground bg-accent rounded-md hover:bg-accent/80 font-bold transition">
+    Login
+  </a>
+  {% endif %}
+  </div>
+</header>
