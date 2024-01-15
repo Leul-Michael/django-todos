@@ -9,8 +9,8 @@
         todos
     </a> {% endcomment %}
   {% if request.user.is_authenticated %}
-  <a href="{% url "logout" %}" class="py-2 px-5 text-sm text-color-foreground bg-accent rounded-md hover:bg-accent/80 font-bold transition">
-    Logout
+  <a href="{% url "logout" %}" class="py-2 px-3 text-sm text-color-foreground bg-accent rounded-md hover:bg-accent/80 font-bold transition">
+    <img src="{% static "images/logout.png" %}" alt="logout" class="w-[25px] min-w-[25px]">
   </a>
   {% else %}
   <a href="{% url "login" %}" class="py-2 px-5 text-sm text-color-foreground bg-accent rounded-md hover:bg-accent/80 font-bold transition">

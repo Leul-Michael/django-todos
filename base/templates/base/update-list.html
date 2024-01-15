@@ -3,48 +3,60 @@
 <section
   class="max-w-screen-lg mx-auto flex flex-col w-full flex-1 py-20 h-full"
 >
-  <div class="flex flex-col flex-1 border rounded-lg p-4 sm:p-8">
-    <form id="form" class="flex justify-end w-full" action="" method="POST">
-      {% csrf_token %}<!>
-      {% method_override 'DELETE' %}
-      <button
-        type="submit"
-        class="group disabled:cursor-not-allowed relative flex gap-2 justify-center items-center py-2 px-5 text-sm text-color bg-border rounded-md hover:bg-red-700 font-bold transition"
+  <div
+    class="flex flex-col gap-8 items-center flex-1 border rounded-lg p-6 sm:p-8"
+  >
+    <div class="flex items-center justify-between gap-4 flex-wrap w-full">
+      <a
+        href="{% url 'home' %}?list={{list}}"
+        class="self-start py-2 px-5 text-sm text-color bg-border rounded-md hover:bg-border/70 font-bold transition"
       >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          x="0px"
-          y="0px"
-          class="w-[20px] fill-color group-hover:fill-red-400 transition"
-          viewBox="0 0 30 30"
-        >
-          <path
-            d="M 14.984375 2.4863281 A 1.0001 1.0001 0 0 0 14 3.5 L 14 4 L 8.5 4 A 1.0001 1.0001 0 0 0 7.4863281 5 L 6 5 A 1.0001 1.0001 0 1 0 6 7 L 24 7 A 1.0001 1.0001 0 1 0 24 5 L 22.513672 5 A 1.0001 1.0001 0 0 0 21.5 4 L 16 4 L 16 3.5 A 1.0001 1.0001 0 0 0 14.984375 2.4863281 z M 6 9 L 7.7929688 24.234375 C 7.9109687 25.241375 8.7633438 26 9.7773438 26 L 20.222656 26 C 21.236656 26 22.088031 25.241375 22.207031 24.234375 L 24 9 L 6 9 z"
-          ></path>
-        </svg>
-        Delete List
-      </button>
-    </form>
-    <h1 class="text-xl sm:text-3xl font-bold">Update {{list}}.</h1>
-
-    <div class="flex flex-col gap-2 rounded-lg sm:w-[475px] w-full">
-      <form id="form" method="POST" action="" class="flex flex-col gap-6 my-4">
-        {% csrf_token %}
-        <div class="form-control">
-          {{ form.name.label_tag }}<!>
-          {{ form.name }}<!>
-          {{ form.name.errors }}
-        </div>
+        Go Back
+      </a>
+      <form id="form" class="flex" action="" method="POST">
+        {% csrf_token %}<!>
+        {% method_override 'DELETE' %}
         <button
           type="submit"
-          class="group disabled:cursor-not-allowed relative flex items-center justify-center gap-4 py-2 h-[45px] px-5 text-sm text-color-foreground bg-accent rounded-md hover:bg-accent/80 font-bold transition"
+          class="group disabled:cursor-not-allowed relative flex gap-2 justify-center items-center py-2 px-5 text-sm text-color bg-border rounded-md hover:bg-red-700 font-bold transition"
         >
-          <span
-            class="absolute animate-spin left-3 hidden group-disabled:flex w-[20px] aspect-square border-[3px] border-r-transparent rounded-full"
-          ></span>
-          Update List
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            x="0px"
+            y="0px"
+            class="w-[20px] fill-color group-hover:fill-red-400 transition"
+            viewBox="0 0 30 30"
+          >
+            <path
+              d="M 14.984375 2.4863281 A 1.0001 1.0001 0 0 0 14 3.5 L 14 4 L 8.5 4 A 1.0001 1.0001 0 0 0 7.4863281 5 L 6 5 A 1.0001 1.0001 0 1 0 6 7 L 24 7 A 1.0001 1.0001 0 1 0 24 5 L 22.513672 5 A 1.0001 1.0001 0 0 0 21.5 4 L 16 4 L 16 3.5 A 1.0001 1.0001 0 0 0 14.984375 2.4863281 z M 6 9 L 7.7929688 24.234375 C 7.9109687 25.241375 8.7633438 26 9.7773438 26 L 20.222656 26 C 21.236656 26 22.088031 25.241375 22.207031 24.234375 L 24 9 L 6 9 z"
+            ></path>
+          </svg>
+          Delete List
         </button>
       </form>
+    </div>
+    <div class="flex flex-col sm:w-auto w-full gap-4">
+      <h1 class="text-xl sm:text-3xl font-bold">Update {{list}}.</h1>
+
+      <div class="flex flex-col gap-2 rounded-lg sm:w-[475px]">
+        <form id="form" method="POST" action="" class="flex flex-col gap-6 my-">
+          {% csrf_token %}
+          <div class="form-control">
+            {{ form.name.label_tag }}<!>
+            {{ form.name }}<!>
+            {{ form.name.errors }}
+          </div>
+          <button
+            type="submit"
+            class="group disabled:cursor-not-allowed relative flex items-center justify-center gap-4 py-2 h-[45px] px-5 text-sm text-color-foreground bg-accent rounded-md hover:bg-accent/80 font-bold transition"
+          >
+            <span
+              class="absolute animate-spin left-3 hidden group-disabled:flex w-[20px] aspect-square border-[3px] border-r-transparent rounded-full"
+            ></span>
+            Update List
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </section>

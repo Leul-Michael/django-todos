@@ -3,31 +3,46 @@
 <section
   class="max-w-screen-lg mx-auto flex flex-col w-full flex-1 py-20 h-full"
 >
-  <div class="flex flex-col flex-1 border rounded-lg p-4 sm:p-8">
-    <h1 class="text-xl sm:text-3xl font-bold">Add New Task.</h1>
-    <div class="flex flex-col gap-2 rounded-lg sm:w-[475px] w-full">
-      <form id="form" method="POST" action="" class="flex flex-col gap-6 my-4">
-        {% csrf_token %}
-        <div class="form-control">
-          {{ form.name.label_tag }}<!>
-          {{ form.name }}<!>
-          {{ form.name.errors }}
-        </div>
-        <div class="form-control">
-          {{ form.description.label_tag }}<!>
-          {{ form.description }}<!>
-          {{ form.description.errors }}
-        </div>
-        <button
-          type="submit"
-          class="group disabled:cursor-not-allowed relative flex items-center justify-center gap-4 py-2 h-[45px] px-5 text-sm text-color-foreground bg-accent rounded-md hover:bg-accent/80 font-bold transition"
+  <div
+    class="flex flex-col gap-8 items-center flex-1 border rounded-lg p-6 sm:p-8"
+  >
+    <a
+      href="{% url 'home' %}?list={{list}}"
+      class="self-start py-2 px-5 text-sm text-color bg-border rounded-md hover:bg-border/70 font-bold transition"
+    >
+      Go Back
+    </a>
+    <div class="flex flex-col sm:w-auto w-full">
+      <h1 class="text-xl sm:text-3xl font-bold">Add New Task.</h1>
+      <div class="flex flex-col gap-2 rounded-lg sm:w-[475px]">
+        <form
+          id="form"
+          method="POST"
+          action=""
+          class="flex flex-col gap-6 my-4 w-full"
         >
-          <span
-            class="absolute animate-spin left-3 hidden group-disabled:flex w-[20px] aspect-square border-[3px] border-r-transparent rounded-full"
-          ></span>
-          Add Task
-        </button>
-      </form>
+          {% csrf_token %}
+          <div class="form-control">
+            {{ form.name.label_tag }}<!>
+            {{ form.name }}<!>
+            {{ form.name.errors }}
+          </div>
+          <div class="form-control">
+            {{ form.description.label_tag }}<!>
+            {{ form.description }}<!>
+            {{ form.description.errors }}
+          </div>
+          <button
+            type="submit"
+            class="group disabled:cursor-not-allowed relative flex items-center justify-center gap-4 py-2 h-[45px] px-5 text-sm text-color-foreground bg-accent rounded-md hover:bg-accent/80 font-bold transition"
+          >
+            <span
+              class="absolute animate-spin left-3 hidden group-disabled:flex w-[20px] aspect-square border-[3px] border-r-transparent rounded-full"
+            ></span>
+            Add Task
+          </button>
+        </form>
+      </div>
     </div>
   </div>
 </section>

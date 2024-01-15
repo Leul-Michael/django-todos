@@ -35,7 +35,7 @@ def login(request):
         return redirect('home')
     
     if request.method == 'POST':
-        email = request.POST.get('email')
+        email = request.POST.get('email').lower()
         password = request.POST.get('password')
         
         try:
@@ -136,7 +136,7 @@ def createListTask(request, id):
             else:
                 messages.add_message(request, messages.ERROR, "List not found!")
                 return redirect('home') 
-    context = {'form': form}    
+    context = {'form': form, 'list': id}    
     return render(request, "base/new-task.html", context)  
 
 @login_required(login_url='login')
@@ -164,9 +164,9 @@ def updateTask(request, id):
 
     if request.method == "DELETE":
         todo.delete()
-        return redirect('home')
+        return redirect(reverse('home') + '?list=' + str(todo.todo_list))
           
-    context = {'form': form, 'task': todo}    
+    context = {'form': form, 'task': todo, 'id': id}    
     return render(request, "base/update-task.html", context)  
 
 @login_required(login_url='login')
