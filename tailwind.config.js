@@ -11,6 +11,11 @@ module.exports = {
         accent: "hsl(108 100% 65%)",
         "accent-dark": "#635fd8",
       },
+      gridTemplateColumns: {
+        "layout-200": "repeat(auto-fill, minmax(200px, 1fr))",
+        "layout-250": "repeat(auto-fill, minmax(250px, 1fr))",
+        "layout-300": "repeat(auto-fill, minmax(300px, 1fr))",
+      },
     },
   },
   plugins: [],

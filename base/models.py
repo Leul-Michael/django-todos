@@ -1,18 +1,20 @@
+import uuid
 from django.db import models
-from django.contrib.auth.models import User, AbstractUser
+from django.contrib.auth.models import User, AbstractUser, BaseUserManager
 
 # Create your models here
-
 class User(AbstractUser):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = []
+    REQUIRED_FIELDS = ['username']
     
     def __str__(self):
         return self.username
 
 class Todo(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     todo_list = models.ForeignKey('TodoList', on_delete=models.CASCADE)
@@ -29,6 +31,7 @@ class Todo(models.Model):
         return self.name
     
 class TodoList(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     

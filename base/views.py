@@ -174,11 +174,10 @@ def starTask(request, id):
     req_from = request.PATCH['from'] if request.PATCH.get('from') != None else None
 
     if request.method == "PATCH":
-        print(req_from)
         task = get_object_or_404(Todo, id=id, todo_list__user=request.user)
         task.is_starred = not task.is_starred
         task.save()
-    return redirect(req_from, id=id) if req_from != None else redirect('home')   
+    return redirect(req_from, id=id) if req_from != None else redirect(reverse('home') + '?list=' + str(task.todo_list))
  
 
 @login_required(login_url='login')
@@ -186,7 +185,6 @@ def completeTask(request, id):
     req_from = request.PATCH['from'] if request.PATCH.get('from') != None else None
     
     if request.method == "PATCH":
-        print(req_from)
         task = get_object_or_404(Todo, id=id, todo_list__user=request.user)
         task.is_completed = not task.is_completed
         task.save()
